@@ -34,6 +34,14 @@ const linkLogo = (currentCategory) => {
   }
 };
 
+const collectProduct = () => {
+    console.log('collectProduct')
+}
+
+const addProduct = () => {
+    console.log('addProduct')
+}
+
 const renderProducts = (currentCategory = "pizza") => {
   const currentProducts = menu.filter(
     (item) => item.category === currentCategory
@@ -42,8 +50,7 @@ const renderProducts = (currentCategory = "pizza") => {
   let element = "";
 
   currentProducts.map((product) => {
-    console.log(linkLogo(product.market));
-
+    const isSandwiches = product.category === 'sandwiches'
     element += `
         <article class="product_card">
             <div class=${
@@ -73,7 +80,10 @@ const renderProducts = (currentCategory = "pizza") => {
                     <button class="product_card__inc-dec">+</button>
                 </div>
             </div>
-            <button class="product_card_btn_add">В КОРЗИНУ</button>
+            <button class="product_card_btn_add"
+            >
+                ${isSandwiches? 'СОБРАТЬ' : 'В КОРЗИНУ'}
+            </button>
         </article>`;
     productsBoard.innerHTML = element;
   });
