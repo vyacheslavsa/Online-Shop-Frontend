@@ -260,3 +260,7 @@ button {
 .active_tab {
   background-color: var(--yellow200);
 }
+
+.product_card__logo_none {
+    display: none;
+}

@@ -18,6 +18,22 @@ const changeTab = () => {
   }
 };
 
+const linkLogo = (currentCategory) => {
+  switch (currentCategory) {
+    case "doner":
+      return "/i/markets/doner.png";
+      break;
+    case "subway":
+      return "/i/markets/subway_logo.png";
+      break;
+    case "sfc":
+      return "/i/markets/south_fried_chicken.png";
+      break;
+    default:
+      return "";
+  }
+};
+
 const renderProducts = (currentCategory = "pizza") => {
   const currentProducts = menu.filter(
     (item) => item.category === currentCategory
@@ -26,10 +42,14 @@ const renderProducts = (currentCategory = "pizza") => {
   let element = "";
 
   currentProducts.map((product) => {
+    console.log(linkLogo(product.market));
+
     element += `
         <article class="product_card">
-            <div class="product_card__logo">
-                <img src="${product.market}" alt="no_logo" />
+            <div class=${
+              product.market ? "product_card__logo" : "product_card__logo_none"
+            }>
+                <img src=${linkLogo(product.market)} />
             </div>
             <div class="product_card__image">
             <img src=${product.image} alt="no_image" />
@@ -55,12 +75,3 @@ const renderProducts = (currentCategory = "pizza") => {
 
 renderProducts();
 changeTab();
-
-// category: "pizza";
-// description: "Карбонат, бекон, курица, сыр";
-// image: "/i/pizza/meat.png";
-// market: "";
-// name: "Мясная 35см";
-// price: 450;
-// type: "single";
-// weight: 1;
