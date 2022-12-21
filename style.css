@@ -101,6 +101,7 @@ header h1 {
   border: 10px solid var(--yellow100);
   background-color: var(--white);
   width: 200px;
+  height: 200px;
   box-shadow: 0 0 7px var(--gray600);
 }
 
@@ -254,4 +255,8 @@ button {
   top: 9%;
   left: 7%;
   border-radius: 1px;
+}
+
+.active_tab {
+  background-color: var(--yellow200);
 }
