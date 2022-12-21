@@ -1,46 +1,51 @@
 import data from "./data.js";
 
-const menu = data.menu;
 const allCategory = document.querySelectorAll(".side_bar");
 const productsBoard = document.querySelector(".products_board");
+const modalWindow = document.querySelector(".modal_bg");
+const buttonCloseModal = document.querySelector(".modal_window__close_button");
 
-const changeTab = () => {
-  for (let i = 0; i < allCategory.length; i++) {
-    allCategory[i].addEventListener("click", (e) => {
-      const currentChildren = e.target.parentElement.children;
-      for (let i = 0; i < currentChildren.length; i++) {
-        currentChildren[i].classList.remove("active_tab");
-      }
-      e.target.classList.add("active_tab");
+const menu = data.menu.map((item) => {
+  item.productID = String(Math.round(Math.random() * 10000000000000000000));
+  return item;
+});
 
-      renderProducts(e.target.id);
-    });
-  }
-};
+for (let i = 0; i < allCategory.length; i++) {
+  allCategory[i].addEventListener("click", (e) => {
+    const currentChildren = e.target.parentElement.children;
+    for (let i = 0; i < currentChildren.length; i++) {
+      currentChildren[i].classList.remove("active_tab");
+    }
+    e.target.classList.add("active_tab");
+    renderProducts(e.target.id);
+  });
+}
 
 const linkLogo = (currentCategory) => {
   switch (currentCategory) {
     case "doner":
       return "/i/markets/doner.png";
-      break;
     case "subway":
       return "/i/markets/subway_logo.png";
-      break;
     case "sfc":
       return "/i/markets/south_fried_chicken.png";
-      break;
     default:
       return "";
   }
 };
 
-const collectProduct = () => {
-    console.log('collectProduct')
-}
+const openModal = () => {
+  modalWindow.classList.add("open_modal");
+  buttonCloseModal.addEventListener("click", () =>
+    modalWindow.classList.remove("open_modal")
+  );
+};
 
-const addProduct = () => {
-    console.log('addProduct')
-}
+const collectProduct = (product) => {};
+
+const addProduct = (product) => {
+  openModal();
+};
 
 const renderProducts = (currentCategory = "pizza") => {
   const currentProducts = menu.filter(
@@ -50,11 +55,13 @@ const renderProducts = (currentCategory = "pizza") => {
   let element = "";
 
   currentProducts.map((product) => {
-    const isSandwiches = product.category === 'sandwiches'
+    const isSandwiches = product.category === "sandwiches";
     element += `
-        <article class="product_card">
+        <article class="product_card" id=${product.productID}>
             <div class=${
-              product.market ? "product_card__logo" : "product_card__logo_none"
+              product.market
+                ? "product_card__logo__show"
+                : "product_card__logo__hide"
             }>
                 <img src=${linkLogo(product.market)} />
             </div>
@@ -66,8 +73,8 @@ const renderProducts = (currentCategory = "pizza") => {
             </div>
             <div class=${
               product.description
-                ? "product_card__description"
-                : "product_card__description_none"
+                ? "product_card__description__show"
+                : "product_card__description__hide"
             }>
                 <a>${product.description}</a>
             </div>
@@ -80,14 +87,24 @@ const renderProducts = (currentCategory = "pizza") => {
                     <button class="product_card__inc-dec">+</button>
                 </div>
             </div>
-            <button class="product_card_btn_add"
-            >
-                ${isSandwiches? 'СОБРАТЬ' : 'В КОРЗИНУ'}
+            <button class="product_card_btn_add">
+                ${isSandwiches ? "СОБРАТЬ" : "В КОРЗИНУ"}
             </button>
         </article>`;
     productsBoard.innerHTML = element;
   });
+
+  const allCard = document.querySelectorAll(".product_card_btn_add");
+  for (let i = 0; i < allCard.length; i++) {
+    allCard[i].addEventListener("click", () => {
+      const selectedProduct = menu.find(
+        (item) => item.productID === allCard[i].parentNode.id
+      );
+      selectedProduct.category === "sandwiches"
+        ? collectProduct(selectedProduct)
+        : addProduct(selectedProduct);
+    });
+  }
 };
 
 renderProducts();
-changeTab();

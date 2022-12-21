@@ -84,11 +84,11 @@ header h1 {
   gap: 15px;
 }
 
-.product_card__logo {
+.product_card__logo__show {
   width: 100%;
 }
 
-.product_card__logo img {
+.product_card__logo__show img {
   height: 50px;
 }
 
@@ -266,10 +266,95 @@ button {
   background-color: var(--yellow200);
 }
 
-.product_card__logo_none {
+.product_card__logo__hide {
   display: none;
 }
 
-.product_card__description_none {
+.product_card__description__show {
   height: 80px;
+}
+
+.modal_bg {
+  display: none;
+}
+
+.open_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  transition: 0.5s all;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal_window {
+  width: 70%;
+  height: 70%;
+  background-color: var(--white);
+  border-radius: var(--default-border-radius);
+  overflow: hidden;
+}
+
+.modal_window__header {
+  height: 10%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--yellow300);
+}
+
+.modal_window__close_button {
+  position: absolute;
+  top: -10px;
+  right: 4px;
+  transform: rotate(45deg);
+  font-size: 50px;
+  color: var(--gray500);
+  font-weight: 100;
+}
+
+.modal_window__head_text {
+  font-size: 30px;
+  color: var(--white);
+  font-weight: 100;
+  text-shadow: 0 0 2px var(--gray600);
+}
+
+.modal_window__content {
+  min-height: 65%;
+  background-color: var(--gray100);
+
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+
+.modal_window__tabs_panel {
+  display: flex;
+  align-items: center;
+  height: 7vh;
+  width: 90%;
+  border-radius: var(--default-border-radius);
+  background-color: var(--white);
+}
+
+.modal_window__tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 17%;
+  height: 100%;
+  border: 1px solid;
+}
+
+.modal_window__footer {
+  margin-top: 30px;
+  text-align: center;
 }
