@@ -138,6 +138,11 @@ button {
 
 .product_card__name {
   margin-top: 10px;
+  min-height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .product_card__board {
@@ -262,5 +267,9 @@ button {
 }
 
 .product_card__logo_none {
-    display: none;
+  display: none;
+}
+
+.product_card__description_none {
+  height: 80px;
 }

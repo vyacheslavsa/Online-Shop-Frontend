@@ -54,9 +54,15 @@ const renderProducts = (currentCategory = "pizza") => {
             <div class="product_card__image">
             <img src=${product.image} alt="no_image" />
             </div>
-            <p class="product_card__name">${product.name}</p>
-                <div class="product_card__description">
-            <a>${product.description}</a>
+            <div class="product_card__name">
+                <p>${product.name}</p>
+            </div>
+            <div class=${
+              product.description
+                ? "product_card__description"
+                : "product_card__description_none"
+            }>
+                <a>${product.description}</a>
             </div>
                 <p class="product_card__price">Цена: ${product.price} руб.</p>
             <div class="product_card__count">
