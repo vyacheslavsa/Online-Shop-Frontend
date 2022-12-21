@@ -1,31 +1,33 @@
 /*COLORS*/
 
 :root {
-  --gray: #444444;
-  --lite-gray: #ecebe9;
-  --gray-a9: #a9a9a9;
-  --gray-ca: #cacaca;
-  --gray-b4: #b4b4b4;
-  --gray808: #808080;
+  --gray100: #ecebe9;
+  --gray200: #cacaca;
+  --gray300: #b4b4b4;
+  --gray400: #a9a9a9;
+  --gray500: #808080;
+  --gray600: #444444;
 
   --orange: #d96848;
-  --lite-orange: #f4b200;
 
-  --yellow: #f6d000;
-  --dark-yellow: #f6bd00;
-  --shadow-yellow: #cfa400;
+  --yellow100: #f6d000;
+  --yellow200: #f4b200;
+  --yellow300: #f6bd00;
+  --yellow400: #cfa400;
 
-  --lite-blue: #5d9bcd;
-  --dark-blue: #1e2d3b;
+  --blue100: #5d9bcd;
+  --blue200: #1e2d3b;
 
   --white: #ffffff;
+
+  --default-border-radius: 5px;
 }
 
 /*--------*/
 
 body {
-  background-color: var(--lite-gray);
-  color: var(--gray);
+  background-color: var(--gray100);
+  color: var(--gray600);
   font-family: sans-serif;
   font-weight: bold;
 }
@@ -52,9 +54,9 @@ header h1 {
 
 .side_bar {
   background-color: white;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   margin-bottom: 40px;
-  box-shadow: 0 0 10px var(--gray-a9);
+  box-shadow: 0 0 10px var(--gray400);
   overflow: hidden;
   min-width: 235px;
 }
@@ -67,7 +69,7 @@ header h1 {
 }
 
 .side_bar__link:hover {
-  background-color: var(--yellow);
+  background-color: var(--yellow100);
   color: var(--white);
 }
 
@@ -96,17 +98,17 @@ header h1 {
 
 .product_card__image > img {
   border-radius: 50%;
-  border: 10px solid var(--yellow);
+  border: 10px solid var(--yellow100);
   background-color: var(--white);
   width: 200px;
-  box-shadow: 0 0 7px var(--gray);
+  box-shadow: 0 0 7px var(--gray600);
 }
 
 .product_card__description {
-  border-top: 2px solid var(--gray);
-  border-bottom: 2px solid var(--gray);
+  border-top: 2px solid var(--gray600);
+  border-bottom: 2px solid var(--gray600);
   min-height: 50px;
-  color: var(--lite-blue);
+  color: var(--blue100);
   font-size: 14px;
   text-decoration: underline;
   margin: 10px;
@@ -124,12 +126,12 @@ button {
 }
 
 .product_card_btn_add {
-  background-color: var(--yellow);
+  background-color: var(--yellow100);
   box-sizing: border-box;
   padding: 5px 20px;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   color: var(--white);
-  box-shadow: 0 1px 4px var(--gray);
+  box-shadow: 0 1px 4px var(--gray600);
   margin-top: 10px;
 }
 
@@ -160,8 +162,8 @@ button {
   background-color: var(--white);
   border-radius: 50%;
   font-size: 20px;
-  color: var(--gray-ca);
-  box-shadow: 0 1px 4px var(--gray);
+  color: var(--gray200);
+  box-shadow: 0 1px 4px var(--gray600);
 
   display: flex;
   justify-content: center;
@@ -171,9 +173,9 @@ button {
 .product_card__value {
   width: 60px;
   height: 100%;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   background-color: var(--white);
-  box-shadow: 0 1px 4px var(--gray);
+  box-shadow: 0 1px 4px var(--gray600);
 
   display: flex;
   justify-content: center;
@@ -185,17 +187,17 @@ button {
   width: 100%;
   min-width: 235px;
   height: 220px;
-  border-radius: 5px;
-  background-color: var(--yellow);
+  border-radius: var(--default-border-radius);
+  background-color: var(--yellow100);
   overflow: hidden;
-  box-shadow: 0 0 10px var(--gray-a9);
+  box-shadow: 0 0 10px var(--gray400);
 }
 
 .shopping_cart__header {
   width: 100%;
   height: 30%;
-  background-color: var(--dark-yellow);
-  border-bottom: 1px solid var(--gray-b4);
+  background-color: var(--yellow300);
+  border-bottom: 1px solid var(--gray300);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -215,7 +217,7 @@ button {
   justify-content: space-between;
   align-items: center;
   height: 20%;
-  border-bottom: 2px solid var(--lite-orange);
+  border-bottom: 2px solid var(--yellow200);
   margin: 0 20px;
   font-size: 15px;
 }
@@ -229,17 +231,17 @@ button {
 }
 
 .shopping_cart__footer > button {
-  background-color: var(--gray808);
+  background-color: var(--gray500);
   color: var(--white);
   padding: 7px 15px;
-  border-radius: 5px;
-  box-shadow: 0 1px 2px var(--dark-blue);
+  border-radius: var(--default-border-radius);
+  box-shadow: 0 1px 2px var(--blue200);
 }
 
 .shopping_cart__name {
   font-size: 30px;
   color: var(--white);
-  text-shadow: 0 0 2px var(--gray);
+  text-shadow: 0 0 2px var(--gray600);
   margin-left: 50px;
 }
 
@@ -247,7 +249,7 @@ button {
   position: absolute;
   width: 6px;
   height: 17px;
-  background-color: var(--shadow-yellow);
+  background-color: var(--yellow400);
   transform: matrix(9, 10, -2, 1, 50, 49);
   top: 9%;
   left: 7%;
