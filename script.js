@@ -1,25 +1,65 @@
 import data from "./data.js";
 
 const allCategory = document.querySelectorAll(".side_bar");
+const allTabs = document.querySelectorAll(".modal_window__tabs_panel");
 const productsBoard = document.querySelector(".products_board");
 const modalWindow = document.querySelector(".modal_bg");
 const buttonCloseModal = document.querySelector(".modal_window__close_button");
+const footerModal = document.querySelector(".modal_window__footer");
+const headerModalText = document.querySelector(".modal_window__head_text");
+const modalIngredients = document.querySelector(".modal_window__ingredients");
+const childFooter = footerModal.childNodes;
 
-const menu = data.menu.map((item) => {
-  item.productID = String(Math.round(Math.random() * 10000000000000000000));
-  return item;
-});
+const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
 
-for (let i = 0; i < allCategory.length; i++) {
-  allCategory[i].addEventListener("click", (e) => {
-    const currentChildren = e.target.parentElement.children;
-    for (let i = 0; i < currentChildren.length; i++) {
-      currentChildren[i].classList.remove("active_tab");
-    }
-    e.target.classList.add("active_tab");
-    renderProducts(e.target.id);
+const addIDforData = () => {
+  const generateID = () =>
+    String(Math.round(Math.random() * 10000000000000000000));
+
+  const addID = (arr) => {
+    arr.map((item) => (item.productID = generateID()));
+  };
+
+  allObjData.push("menu");
+
+  allObjData.forEach((item) => {
+    addID(data[item]);
   });
-}
+};
+
+const reFormatData = () => {
+  allObjData.forEach((item) => {
+    const newArr = [];
+    for (const key in data[item]) {
+      newArr.push(data[item][key]);
+    }
+    data[item] = newArr;
+  });
+};
+
+reFormatData();
+addIDforData();
+
+const addEventsOnTabs = (categories, newClass) => {
+  for (let i = 0; i < categories.length; i++) {
+    categories[i].addEventListener("click", (e) => {
+      const currentChildren = e.target.parentElement.children;
+      for (let i = 0; i < currentChildren.length; i++) {
+        currentChildren[i].classList.remove(newClass);
+      }
+      e.target.classList.add(newClass);
+      newClass === "active_tab"
+        ? renderProducts(e.target.id)
+        : renderIngredients(e.target.id);
+    });
+  }
+};
+
+buttonCloseModal.addEventListener("click", () => {
+  modalWindow.classList.remove("open_modal");
+  imageBlock.classList.add("modal_image")
+  // childFooter[1].classList.remove("count_modal");
+});
 
 const linkLogo = (currentCategory) => {
   switch (currentCategory) {
@@ -36,19 +76,18 @@ const linkLogo = (currentCategory) => {
 
 const openModal = () => {
   modalWindow.classList.add("open_modal");
-  buttonCloseModal.addEventListener("click", () =>
-    modalWindow.classList.remove("open_modal")
-  );
+  // childFooter[1].classList.add("count_modal");
 };
 
 const collectProduct = (product) => {};
 
 const addProduct = (product) => {
   openModal();
+  renderIngredients();
 };
 
 const renderProducts = (currentCategory = "pizza") => {
-  const currentProducts = menu.filter(
+  const currentProducts = data.menu.filter(
     (item) => item.category === currentCategory
   );
 
@@ -66,7 +105,7 @@ const renderProducts = (currentCategory = "pizza") => {
                 <img src=${linkLogo(product.market)} />
             </div>
             <div class="product_card__image">
-            <img src=${product.image} alt="no_image" />
+              <img src=${product.image} alt="no_image" />
             </div>
             <div class="product_card__name">
                 <p>${product.name}</p>
@@ -97,7 +136,7 @@ const renderProducts = (currentCategory = "pizza") => {
   const allCard = document.querySelectorAll(".product_card_btn_add");
   for (let i = 0; i < allCard.length; i++) {
     allCard[i].addEventListener("click", () => {
-      const selectedProduct = menu.find(
+      const selectedProduct = data.menu.find(
         (item) => item.productID === allCard[i].parentNode.id
       );
       selectedProduct.category === "sandwiches"
@@ -107,4 +146,52 @@ const renderProducts = (currentCategory = "pizza") => {
   }
 };
 
+
+
+const renderIngredients = (ingredients = "sizes") => {
+  const currentTextHeader = (tab) => {
+    switch (tab) {
+      case "sizes":
+        return "Выберите размер сендвича";
+      case "breads":
+        return "Хлеб для сендвича на выбор";
+      case "vegetables":
+        return "Дополнительные овощи бесплатно";
+      case "sauces":
+        return "Выберите три бесплатных соуса по вкусу";
+      case "fillings":
+        return "Выберите размер сендвича";
+      case "done":
+        return "Добавьте начинку по вкусу";
+      default:
+        return "Проверьте и добавьте в корзину";
+    }
+  };
+  headerModalText.innerHTML = currentTextHeader(ingredients);
+
+  let element = "";
+
+  data[ingredients].map((ingredients) => {
+    element += `
+    <div class="modal_window__card">
+      <div class="product_card__image modal_image">
+        <img src=${ingredients.image} alt="no_image" />
+      </div>
+      <div class="modal_window__description">
+        <p class="modal_window__text">${ingredients.name}</p>
+        <p class="modal_window__price">${ingredients.price}</p>
+      </div>
+    </div>
+    `;
+    modalIngredients.innerHTML = element;
+    console.log(data)
+  });
+};
+
+const addEvents = () => {
+  addEventsOnTabs(allCategory, "active_tab");
+  addEventsOnTabs(allTabs, "active_ingredients");
+};
+
+addEvents();
 renderProducts();

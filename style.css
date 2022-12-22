@@ -9,6 +9,7 @@
   --gray600: #444444;
 
   --orange: #d96848;
+  --tomato: #d96746;
 
   --yellow100: #f6d000;
   --yellow200: #f4b200;
@@ -105,7 +106,7 @@ header h1 {
   box-shadow: 0 0 7px var(--gray600);
 }
 
-.product_card__description {
+/* .product_card__description {
   border-top: 2px solid var(--gray600);
   border-bottom: 2px solid var(--gray600);
   min-height: 50px;
@@ -115,7 +116,7 @@ header h1 {
   margin: 10px;
   padding: 3px;
   cursor: pointer;
-}
+} */
 
 button {
   padding: 0;
@@ -271,8 +272,21 @@ button {
 }
 
 .product_card__description__show {
-  height: 80px;
+  border-top: 2px solid var(--gray600);
+  border-bottom: 2px solid var(--gray600);
+  min-height: 50px;
+  color: var(--blue100);
+  font-size: 14px;
+  text-decoration: underline;
+  margin: 10px;
+  padding: 3px;
+  cursor: pointer;
+  
 }
+
+.product_card__description__hide {
+  min-height: 80px;
+} 
 
 .modal_bg {
   display: none;
@@ -327,13 +341,12 @@ button {
 }
 
 .modal_window__content {
-  min-height: 65%;
+  min-height: 80%;
   background-color: var(--gray100);
 
   display: flex;
-  justify-content: center;
-  padding: 30px 0;
-  box-sizing: border-box;
+  align-items: center;
+  flex-direction: column;
 }
 
 .modal_window__tabs_panel {
@@ -343,18 +356,54 @@ button {
   width: 90%;
   border-radius: var(--default-border-radius);
   background-color: var(--white);
+  margin-top: 5%;
+  overflow: hidden;
 }
 
 .modal_window__tab {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   width: 17%;
   height: 100%;
-  border: 1px solid;
+}
+
+.modal_window__tab:hover {
+  background-color: var(--yellow100);
 }
 
 .modal_window__footer {
-  margin-top: 30px;
+  margin-top: 10px;
   text-align: center;
+}
+
+.active_ingredients {
+  background-color: var(--tomato);
+}
+
+.modal_window__ingredients {
+  width: 90%;
+  border: 1px solid;
+  height: 40vh;
+  overflow-y: scroll;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.modal_window__card {
+  border: 1px solid;
+  height: fit-content;
+  text-align: center;
+}
+
+.modal_image {
+  border: 1px solid red;
+}
+
+.modal_image img {
+  width: 100px;
+  height: 100px;
 }
