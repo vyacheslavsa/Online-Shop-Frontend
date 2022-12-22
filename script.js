@@ -2,15 +2,16 @@ import data from "./data.js";
 
 const allCategory = document.querySelectorAll(".side_bar");
 const allTabs = document.querySelectorAll(".modal_window__tabs_panel");
+const allIngredients = document.querySelectorAll(".modal_window__ingredients");
 const productsBoard = document.querySelector(".products_board");
 const modalWindow = document.querySelector(".modal_bg");
 const buttonCloseModal = document.querySelector(".modal_window__close_button");
 const footerModal = document.querySelector(".modal_window__footer");
 const headerModalText = document.querySelector(".modal_window__head_text");
 const modalIngredients = document.querySelector(".modal_window__ingredients");
-const childFooter = footerModal.childNodes;
 
 const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
+const customSandwich = {};
 
 const addIDforData = () => {
   const generateID = () =>
@@ -57,8 +58,6 @@ const addEventsOnTabs = (categories, newClass) => {
 
 buttonCloseModal.addEventListener("click", () => {
   modalWindow.classList.remove("open_modal");
-  imageBlock.classList.add("modal_image")
-  // childFooter[1].classList.remove("count_modal");
 });
 
 const linkLogo = (currentCategory) => {
@@ -76,14 +75,28 @@ const linkLogo = (currentCategory) => {
 
 const openModal = () => {
   modalWindow.classList.add("open_modal");
-  // childFooter[1].classList.add("count_modal");
 };
 
-const collectProduct = (product) => {};
-
-const addProduct = (product) => {
+const collectProduct = () => {
   openModal();
   renderIngredients();
+};
+
+const addProductInShoppingCard = (product) => {
+  console.log("addProductInShoppingCard", product);
+};
+
+const addIngredient = (product, category) => {
+  console.log("addIngredient", product, category);
+  const searchResults = data[category].find(
+    (item) => item.productID === product
+  );
+
+  if (!customSandwich.hasOwnProperty(category)) {
+    customSandwich[category] = searchResults.name;
+  }
+
+  console.log(customSandwich);
 };
 
 const renderProducts = (currentCategory = "pizza") => {
@@ -141,12 +154,10 @@ const renderProducts = (currentCategory = "pizza") => {
       );
       selectedProduct.category === "sandwiches"
         ? collectProduct(selectedProduct)
-        : addProduct(selectedProduct);
+        : addProductInShoppingCard(selectedProduct);
     });
   }
 };
-
-
 
 const renderIngredients = (ingredients = "sizes") => {
   const currentTextHeader = (tab) => {
@@ -171,21 +182,29 @@ const renderIngredients = (ingredients = "sizes") => {
 
   let element = "";
 
-  data[ingredients].map((ingredients) => {
-    element += `
-    <div class="modal_window__card">
-      <div class="product_card__image modal_image">
-        <img src=${ingredients.image} alt="no_image" />
-      </div>
-      <div class="modal_window__description">
-        <p class="modal_window__text">${ingredients.name}</p>
-        <p class="modal_window__price">${ingredients.price}</p>
-      </div>
-    </div>
-    `;
-    modalIngredients.innerHTML = element;
-    console.log(data)
-  });
+  if (ingredients !== "done") {
+    data[ingredients].map((ingredients) => {
+      element += `
+        <div class="modal_window__card" id=${ingredients.productID}>
+          <div class="product_card__image modal_image">
+            <img src=${ingredients.image} alt="no_image" />
+          </div>
+          <div class="modal_window__description">
+            <p class="modal_window__text">${ingredients.name}</p>
+            <p class="modal_window__price">Цена: ${ingredients.price} руб.</p>
+          </div>
+        </div>
+        `;
+      modalIngredients.innerHTML = element;
+    });
+    const allCardModal = document.querySelectorAll(".modal_window__card");
+    for (let i = 0; i < allCardModal.length; i++) {
+      allCardModal[i].addEventListener("click", (e) => {
+        // addEventsOnTabs(allIngredients, "active_card_modal")
+        addIngredient(allCardModal[i].id, ingredients);
+      });
+    }
+  }
 };
 
 const addEvents = () => {

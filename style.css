@@ -281,12 +281,11 @@ button {
   margin: 10px;
   padding: 3px;
   cursor: pointer;
-  
 }
 
 .product_card__description__hide {
   min-height: 80px;
-} 
+}
 
 .modal_bg {
   display: none;
@@ -307,8 +306,8 @@ button {
 }
 
 .modal_window {
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   background-color: var(--white);
   border-radius: var(--default-border-radius);
   overflow: hidden;
@@ -320,7 +319,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--yellow300);
+  background-color: var(--yellow100);
 }
 
 .modal_window__close_button {
@@ -337,7 +336,7 @@ button {
   font-size: 30px;
   color: var(--white);
   font-weight: 100;
-  text-shadow: 0 0 2px var(--gray600);
+  text-shadow: 0 0 4px var(--gray600);
 }
 
 .modal_window__content {
@@ -352,12 +351,13 @@ button {
 .modal_window__tabs_panel {
   display: flex;
   align-items: center;
-  height: 7vh;
+  height: 50px;
   width: 90%;
   border-radius: var(--default-border-radius);
   background-color: var(--white);
   margin-top: 5%;
   overflow: hidden;
+  box-shadow: 0 0 7px var(--gray600);
 }
 
 .modal_window__tab {
@@ -384,26 +384,63 @@ button {
 
 .modal_window__ingredients {
   width: 90%;
-  border: 1px solid;
-  height: 40vh;
+  padding: 20px 0;
+
+  height: 500px;
   overflow-y: scroll;
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+  gap: 1em;
 }
 
 .modal_window__card {
-  border: 1px solid;
-  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  border-radius: var(--default-border-radius);
+  padding: 10px;
+  cursor: pointer;
+  height: 250px;
+}
+
+.modal_window__card:hover {
+  background-color: var(--yellow100);
 }
 
 .modal_image {
-  border: 1px solid red;
+  width: 150px;
+  height: 150px;
 }
 
 .modal_image img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.modal_window__text {
+  margin: 10px 0;
+  min-height: 40px;
+}
+
+.modal_window__price {
+  border-top: 2px solid var(--gray600);
+  color: var(--orange);
+  padding-top: 10px;
+}
+
+.modal_window__description {
+  width: 100%;
+}
+
+.modal_window__description p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.active_card_modal {
+  background-color: var(--tomato);
 }
