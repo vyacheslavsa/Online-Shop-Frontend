@@ -2,11 +2,9 @@ import data from "./data.js";
 
 const allCategory = document.querySelectorAll(".side_bar");
 const allTabs = document.querySelectorAll(".modal_window__tabs_panel");
-const allIngredients = document.querySelectorAll(".modal_window__ingredients");
 const productsBoard = document.querySelector(".products_board");
 const modalWindow = document.querySelector(".modal_bg");
 const buttonCloseModal = document.querySelector(".modal_window__close_button");
-const footerModal = document.querySelector(".modal_window__footer");
 const headerModalText = document.querySelector(".modal_window__head_text");
 const modalIngredients = document.querySelector(".modal_window__ingredients");
 
@@ -87,13 +85,18 @@ const addProductInShoppingCard = (product) => {
 };
 
 const addIngredient = (product, category) => {
-  console.log("addIngredient", product, category);
   const searchResults = data[category].find(
-    (item) => item.productID === product
+    (item) => item.productID === product.id
   );
 
+  if (!Object.keys(customSandwich).length) {
+    customSandwich.allIdIngredients = [];
+  }
+
   if (!customSandwich.hasOwnProperty(category)) {
+    product.classList.add("selected_ingredient");
     customSandwich[category] = searchResults.name;
+    customSandwich.allIdIngredients.push(product.id);
   }
 
   console.log(customSandwich);
@@ -197,11 +200,16 @@ const renderIngredients = (ingredients = "sizes") => {
         `;
       modalIngredients.innerHTML = element;
     });
+
     const allCardModal = document.querySelectorAll(".modal_window__card");
     for (let i = 0; i < allCardModal.length; i++) {
-      allCardModal[i].addEventListener("click", (e) => {
-        // addEventsOnTabs(allIngredients, "active_card_modal")
-        addIngredient(allCardModal[i].id, ingredients);
+      if (
+        customSandwich.hasOwnProperty("allIdIngredients") &&
+        customSandwich.allIdIngredients.includes(allCardModal[i].id)
+      )
+        allCardModal[i].classList.add("selected_ingredient");
+      allCardModal[i].addEventListener("click", () => {
+        addIngredient(allCardModal[i], ingredients);
       });
     }
   }

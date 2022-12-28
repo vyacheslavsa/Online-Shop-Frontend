@@ -8,8 +8,8 @@
   --gray500: #808080;
   --gray600: #444444;
 
-  --orange: #d96848;
-  --tomato: #d96746;
+  --orange100: #ff7c0099;
+  --orange200: #d96848;
 
   --yellow100: #f6d000;
   --yellow200: #f4b200;
@@ -155,7 +155,7 @@ button {
 }
 
 .product_card__price {
-  color: var(--orange);
+  color: var(--orange200);
 }
 
 .product_card__count {
@@ -306,8 +306,8 @@ button {
 }
 
 .modal_window {
-  width: 80%;
-  height: 80%;
+  width: 70%;
+  height: 70%;
   background-color: var(--white);
   border-radius: var(--default-border-radius);
   overflow: hidden;
@@ -340,7 +340,7 @@ button {
 }
 
 .modal_window__content {
-  min-height: 80%;
+  height: 590px;
   background-color: var(--gray100);
 
   display: flex;
@@ -379,14 +379,14 @@ button {
 }
 
 .active_ingredients {
-  background-color: var(--tomato);
+  background-color: var(--orange200);
 }
 
 .modal_window__ingredients {
   width: 90%;
   padding: 20px 0;
 
-  height: 500px;
+  height: 460px;
   overflow-y: scroll;
 
   display: grid;
@@ -427,7 +427,7 @@ button {
 
 .modal_window__price {
   border-top: 2px solid var(--gray600);
-  color: var(--orange);
+  color: var(--orange200);
   padding-top: 10px;
 }
 
@@ -443,4 +443,8 @@ button {
 
 .active_card_modal {
   background-color: var(--tomato);
+}
+
+.selected_ingredient {
+  background-color: var(--orange100);
 }
