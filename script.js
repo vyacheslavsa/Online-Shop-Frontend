@@ -106,7 +106,7 @@ const eventCardModal = (product, category) => {
     product.classList.add("selected_ingredient");
     customSandwich[category] = searchResults.name;
     customSandwich.allIdIngredients.push(product.id);
-  } else {
+  } else if (customSandwich.allIdIngredients.includes(product.id)) {
     product.classList.remove("selected_ingredient");
     delete customSandwich[category];
     customSandwich.allIdIngredients.splice(
@@ -115,6 +115,19 @@ const eventCardModal = (product, category) => {
     );
     if (customSandwich.allIdIngredients.length === 0)
       delete customSandwich.allIdIngredients;
+  } else {
+    const cardsModal = document.querySelectorAll(".modal_window__card");
+    const currentCard = document.querySelector(".selected_ingredient");
+    
+    customSandwich.allIdIngredients.splice(customSandwich.allIdIngredients.findIndex(item => item === currentCard.id))
+    customSandwich.allIdIngredients.push(product.id)
+    customSandwich[category] = searchResults.name;
+
+    for (let i = 0; i < cardsModal.length; i++) {
+      cardsModal[i].classList.remove("selected_ingredient");
+    }
+
+    product.classList.add("selected_ingredient")
   }
 
   const allTabsModal = document.querySelectorAll(".modal_window__tab");
@@ -125,6 +138,8 @@ const eventCardModal = (product, category) => {
       allTabsModal[i].classList.remove("have_ingredients");
     }
   }
+
+  console.log(customSandwich)
 };
 
 const renderProducts = (currentCategory = "pizza") => {
@@ -199,10 +214,8 @@ const renderIngredients = (ingredients = "sizes") => {
       case "sauces":
         return "Выберите три бесплатных соуса по вкусу";
       case "fillings":
-        return "Выберите размер сендвича";
-      case "done":
         return "Добавьте начинку по вкусу";
-      default:
+      case "done":
         return "Проверьте и добавьте в корзину";
     }
   };
