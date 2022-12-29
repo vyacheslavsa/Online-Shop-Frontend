@@ -9,7 +9,7 @@ const headerModalText = document.querySelector(".modal_window__head_text");
 const modalIngredients = document.querySelector(".modal_window__ingredients");
 
 const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
-const customSandwich = {};
+let customSandwich = {};
 
 const addIDforData = () => {
   const generateID = () =>
@@ -47,15 +47,24 @@ const addEventsOnTabs = (categories, newClass) => {
         currentChildren[i].classList.remove(newClass);
       }
       e.target.classList.add(newClass);
-      newClass === "active_tab"
-        ? renderProducts(e.target.id)
-        : renderIngredients(e.target.id);
+      if (newClass === "active_tab") {
+        renderProducts(e.target.id);
+      } else {
+        renderIngredients(e.target.id);
+      }
     });
   }
 };
 
 buttonCloseModal.addEventListener("click", () => {
   modalWindow.classList.remove("open_modal");
+  const tabsModal = document.querySelectorAll(".modal_window__tab");
+  for (let i = 0; i < tabsModal.length; i++) {
+    tabsModal[i].classList.remove("active_ingredients");
+    tabsModal[i].classList.remove("have_ingredients");
+    if (i === 0) tabsModal[i].classList.add("active_ingredients");
+  }
+  customSandwich = {};
 });
 
 const linkLogo = (currentCategory) => {
@@ -84,7 +93,7 @@ const addProductInShoppingCard = (product) => {
   console.log("addProductInShoppingCard", product);
 };
 
-const addIngredient = (product, category) => {
+const eventCardModal = (product, category) => {
   const searchResults = data[category].find(
     (item) => item.productID === product.id
   );
@@ -97,9 +106,25 @@ const addIngredient = (product, category) => {
     product.classList.add("selected_ingredient");
     customSandwich[category] = searchResults.name;
     customSandwich.allIdIngredients.push(product.id);
+  } else {
+    product.classList.remove("selected_ingredient");
+    delete customSandwich[category];
+    customSandwich.allIdIngredients.splice(
+      customSandwich.allIdIngredients.findIndex((item) => item === product.id),
+      1
+    );
+    if (customSandwich.allIdIngredients.length === 0)
+      delete customSandwich.allIdIngredients;
   }
 
-  console.log(customSandwich);
+  const allTabsModal = document.querySelectorAll(".modal_window__tab");
+  for (let i = 0; i < allTabsModal.length; i++) {
+    if (customSandwich.hasOwnProperty(allTabsModal[i].id)) {
+      allTabsModal[i].classList.add("have_ingredients");
+    } else {
+      allTabsModal[i].classList.remove("have_ingredients");
+    }
+  }
 };
 
 const renderProducts = (currentCategory = "pizza") => {
@@ -208,8 +233,9 @@ const renderIngredients = (ingredients = "sizes") => {
         customSandwich.allIdIngredients.includes(allCardModal[i].id)
       )
         allCardModal[i].classList.add("selected_ingredient");
+
       allCardModal[i].addEventListener("click", () => {
-        addIngredient(allCardModal[i], ingredients);
+        eventCardModal(allCardModal[i], ingredients);
       });
     }
   }

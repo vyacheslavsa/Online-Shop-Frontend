@@ -448,3 +448,7 @@ button {
 .selected_ingredient {
   background-color: var(--orange100);
 }
+
+.have_ingredients {
+  background-color: var(--orange100);
+}
