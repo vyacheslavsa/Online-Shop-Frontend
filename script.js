@@ -118,16 +118,20 @@ const eventCardModal = (product, category) => {
   } else {
     const cardsModal = document.querySelectorAll(".modal_window__card");
     const currentCard = document.querySelector(".selected_ingredient");
-    
-    customSandwich.allIdIngredients.splice(customSandwich.allIdIngredients.findIndex(item => item === currentCard.id))
-    customSandwich.allIdIngredients.push(product.id)
+
+    customSandwich.allIdIngredients.splice(
+      customSandwich.allIdIngredients.findIndex(
+        (item) => item === currentCard.id
+      )
+    );
+    customSandwich.allIdIngredients.push(product.id);
     customSandwich[category] = searchResults.name;
 
     for (let i = 0; i < cardsModal.length; i++) {
       cardsModal[i].classList.remove("selected_ingredient");
     }
 
-    product.classList.add("selected_ingredient")
+    product.classList.add("selected_ingredient");
   }
 
   const allTabsModal = document.querySelectorAll(".modal_window__tab");
@@ -139,7 +143,7 @@ const eventCardModal = (product, category) => {
     }
   }
 
-  console.log(customSandwich)
+  console.log(customSandwich);
 };
 
 const renderProducts = (currentCategory = "pizza") => {
@@ -224,6 +228,7 @@ const renderIngredients = (ingredients = "sizes") => {
   let element = "";
 
   if (ingredients !== "done") {
+    modalIngredients.classList.remove("done_tab")
     data[ingredients].map((ingredients) => {
       element += `
         <div class="modal_window__card" id=${ingredients.productID}>
@@ -251,6 +256,28 @@ const renderIngredients = (ingredients = "sizes") => {
         eventCardModal(allCardModal[i], ingredients);
       });
     }
+  } else {
+    modalIngredients.classList.add("done_tab")
+    element = `
+        <div class="modal_window__leftContent">
+          <div class="product_card__image modal_image">
+            <img src="/i/bread/grey-with-cereal.png">
+          </div>
+        </div>
+        <div class="modal_window__rightContent">
+          <p class="modal_window__descriptionDone">Ваш сендвич готов!</p>
+          <p>Размер:</p>
+          <p>Хлеб:</p>
+          <p>Овощи:</p>
+          <p>Соусы:</p>
+          <p class="modal_window__descriptionLast">Начинка:</p>
+          <p class="modal_window__nameSandwitch">Овощной</p>
+        </div>
+      
+    
+    
+    `;
+    modalIngredients.innerHTML = element;
   }
 };
 

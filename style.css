@@ -307,10 +307,11 @@ button {
 
 .modal_window {
   width: 70%;
-  height: 70%;
+  height: 90%;
   background-color: var(--white);
   border-radius: var(--default-border-radius);
   overflow: hidden;
+  position: relative;
 }
 
 .modal_window__header {
@@ -374,8 +375,13 @@ button {
 }
 
 .modal_window__footer {
-  margin-top: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   text-align: center;
+  background-color: var(--white);
+  width: 100%;
+  padding: 20px 0;
 }
 
 .active_ingredients {
@@ -386,7 +392,7 @@ button {
   width: 90%;
   padding: 20px 0;
 
-  height: 460px;
+  max-height: 250px;
   overflow-y: scroll;
 
   display: grid;
@@ -451,4 +457,63 @@ button {
 
 .have_ingredients {
   background-color: var(--orange100);
+}
+
+.done_tab {
+  display: flex;
+  border: 1px solid;
+  gap: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+.modal_window__leftContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 30%;
+  padding: 0 20px 50px 0;
+}
+
+.modal_window__rightContent{
+  width: 70%;
+}
+
+.modal_window__descriptionDone {
+  border-bottom: 1px solid var(--gray600);
+  margin-bottom: 10px;
+}
+
+.modal_window__rightContent>p {
+  margin-bottom: 10px;
+}
+
+.modal_window__descriptionLast {
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid var(--gray600);
+  padding-bottom: 10px;
+}
+
+.modal_window__nameSandwitch {
+  margin-top: 20px;
+  margin-bottom: 0 !important;
+}
+
+.modal_window__topContent {
+  display: flex;
+}
+
+.modal_window__bottomFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modal_btn {
+  margin-top: 0;
+}
+
+.modal_price {
+  margin-right: 10px;
 }
