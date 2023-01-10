@@ -43,6 +43,19 @@ const reFormatData = () => {
 reFormatData();
 addIDforData();
 
+const concatIdIngredients = () => {
+  const arr = [];
+  allObjData.forEach((item) => {
+    if (item !== "menu") {
+      data[item].forEach((key) => {
+        arr.push({ price: key.price, id: key.productID });
+      });
+    }
+  });
+};
+
+const arrIdPriceIngredients = concatIdIngredients();
+
 const addEventsOnTabs = (categories, newClass) => {
   for (let i = 0; i < categories.length; i++) {
     categories[i].addEventListener("click", (e) => {
@@ -103,7 +116,9 @@ const collectProduct = (product) => {
     customSandwich.srcImage = product.image;
 };
 
-const addProductInShoppingCard = (product) => {};
+const addProductInShoppingCard = (product) => {
+  console.log("addProductInShoppingCard", product);
+};
 
 const eventCardModal = (product, category) => {
   const searchResults = data[category].find(
@@ -116,6 +131,7 @@ const eventCardModal = (product, category) => {
     if (product.classList.contains("selected_ingredient")) {
       customSandwich.price -= searchResults.price;
     } else {
+      //arrIdPriceIngredients
       customSandwich.price += searchResults.price;
     }
   } else {
@@ -123,10 +139,20 @@ const eventCardModal = (product, category) => {
   }
 
   modalPrice.innerHTML = `Цена: ${customSandwich.price || "0"} руб.`;
+  const propertyIsArray =
+    category === "vegetables" ||
+    category === "sauces" ||
+    category === "fillings";
 
   if (!customSandwich.hasOwnProperty(category)) {
     product.classList.add("selected_ingredient");
-    customSandwich[category] = searchResults.name;
+
+    if (propertyIsArray) {
+      customSandwich[category] = [searchResults.name];
+    } else {
+      customSandwich[category] = searchResults.name;
+    }
+
     customSandwich.allIdIngredients.push(product.id);
   } else if (customSandwich.allIdIngredients.includes(product.id)) {
     product.classList.remove("selected_ingredient");
@@ -144,16 +170,25 @@ const eventCardModal = (product, category) => {
     const cardsModal = document.querySelectorAll(".modal_window__card");
     const currentCard = document.querySelector(".selected_ingredient");
 
-    customSandwich.allIdIngredients.splice(
-      customSandwich.allIdIngredients.findIndex(
-        (item) => item === currentCard.id
-      )
-    );
+    if (!propertyIsArray) {
+      customSandwich.allIdIngredients.splice(
+        customSandwich.allIdIngredients.findIndex(
+          (item) => item === currentCard.id
+        )
+      );
+    }
+
     customSandwich.allIdIngredients.push(product.id);
-    customSandwich[category] = searchResults.name;
+
+    if (propertyIsArray) {
+      customSandwich[category].push(searchResults.name);
+      product.classList.add("selected_ingredient");
+    } else {
+      customSandwich[category] = searchResults.name;
+    }
 
     for (let i = 0; i < cardsModal.length; i++) {
-      cardsModal[i].classList.remove("selected_ingredient");
+      !propertyIsArray && cardsModal[i].classList.remove("selected_ingredient");
     }
 
     product.classList.add("selected_ingredient");
@@ -250,7 +285,6 @@ const renderIngredients = (ingredients = "sizes") => {
 
   let element = "";
   let element1 = "";
-  let element2 = "";
 
   if (ingredients !== "done") {
     modalIngredients.classList.remove("done_tab");
