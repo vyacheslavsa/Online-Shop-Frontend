@@ -7,6 +7,10 @@ const modalWindow = document.querySelector(".modal_bg");
 const buttonCloseModal = document.querySelector(".modal_window__close_button");
 const headerModalText = document.querySelector(".modal_window__head_text");
 const modalIngredients = document.querySelector(".modal_window__ingredients");
+const modalPrice = document.querySelector(".modal_price");
+const tabsModal = document.querySelectorAll(".modal_window__tab");
+const footerModal = document.querySelector(".modal_window__footer");
+const bottomFooter = document.querySelector(".modal_window__bottomFooter");
 
 const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
 let customSandwich = {};
@@ -45,20 +49,26 @@ const addEventsOnTabs = (categories, newClass) => {
       const currentChildren = e.target.parentElement.children;
       for (let i = 0; i < currentChildren.length; i++) {
         currentChildren[i].classList.remove(newClass);
+        const countModal = document.querySelector(".count_modal");
+        const btnModal = document.querySelector(".modal_btn");
+
+        currentChildren[i].id === "done" &&
+          countModal &&
+          footerModal.childNodes[0].remove();
+        bottomFooter.childNodes[3] &&
+          btnModal &&
+          bottomFooter.childNodes[3].remove();
       }
       e.target.classList.add(newClass);
-      if (newClass === "active_tab") {
-        renderProducts(e.target.id);
-      } else {
-        renderIngredients(e.target.id);
-      }
+      newClass === "active_tab"
+        ? renderProducts(e.target.id)
+        : renderIngredients(e.target.id);
     });
   }
 };
 
 buttonCloseModal.addEventListener("click", () => {
   modalWindow.classList.remove("open_modal");
-  const tabsModal = document.querySelectorAll(".modal_window__tab");
   for (let i = 0; i < tabsModal.length; i++) {
     tabsModal[i].classList.remove("active_ingredients");
     tabsModal[i].classList.remove("have_ingredients");
@@ -84,23 +94,35 @@ const openModal = () => {
   modalWindow.classList.add("open_modal");
 };
 
-const collectProduct = () => {
+const collectProduct = (product) => {
   openModal();
   renderIngredients();
+  if (!customSandwich.hasOwnProperty("nameSandwich"))
+    customSandwich.nameSandwich = product.name;
+  if (!customSandwich.hasOwnProperty("srcImage"))
+    customSandwich.srcImage = product.image;
 };
 
-const addProductInShoppingCard = (product) => {
-  console.log("addProductInShoppingCard", product);
-};
+const addProductInShoppingCard = (product) => {};
 
 const eventCardModal = (product, category) => {
   const searchResults = data[category].find(
     (item) => item.productID === product.id
   );
-
-  if (!Object.keys(customSandwich).length) {
+  if (Object.keys(customSandwich).length === 2)
     customSandwich.allIdIngredients = [];
+
+  if (customSandwich.hasOwnProperty("price")) {
+    if (product.classList.contains("selected_ingredient")) {
+      customSandwich.price -= searchResults.price;
+    } else {
+      customSandwich.price += searchResults.price;
+    }
+  } else {
+    customSandwich.price = searchResults.price;
   }
+
+  modalPrice.innerHTML = `Цена: ${customSandwich.price || "0"} руб.`;
 
   if (!customSandwich.hasOwnProperty(category)) {
     product.classList.add("selected_ingredient");
@@ -113,8 +135,11 @@ const eventCardModal = (product, category) => {
       customSandwich.allIdIngredients.findIndex((item) => item === product.id),
       1
     );
-    if (customSandwich.allIdIngredients.length === 0)
+
+    if (customSandwich.allIdIngredients.length === 0) {
       delete customSandwich.allIdIngredients;
+      delete customSandwich.price;
+    }
   } else {
     const cardsModal = document.querySelectorAll(".modal_window__card");
     const currentCard = document.querySelector(".selected_ingredient");
@@ -142,8 +167,6 @@ const eventCardModal = (product, category) => {
       allTabsModal[i].classList.remove("have_ingredients");
     }
   }
-
-  console.log(customSandwich);
 };
 
 const renderProducts = (currentCategory = "pizza") => {
@@ -226,9 +249,11 @@ const renderIngredients = (ingredients = "sizes") => {
   headerModalText.innerHTML = currentTextHeader(ingredients);
 
   let element = "";
+  let element1 = "";
+  let element2 = "";
 
   if (ingredients !== "done") {
-    modalIngredients.classList.remove("done_tab")
+    modalIngredients.classList.remove("done_tab");
     data[ingredients].map((ingredients) => {
       element += `
         <div class="modal_window__card" id=${ingredients.productID}>
@@ -257,27 +282,51 @@ const renderIngredients = (ingredients = "sizes") => {
       });
     }
   } else {
-    modalIngredients.classList.add("done_tab")
+    modalIngredients.classList.add("done_tab");
     element = `
         <div class="modal_window__leftContent">
           <div class="product_card__image modal_image">
-            <img src="/i/bread/grey-with-cereal.png">
+            <img src="${customSandwich.srcImage}">
           </div>
         </div>
         <div class="modal_window__rightContent">
           <p class="modal_window__descriptionDone">Ваш сендвич готов!</p>
-          <p>Размер:</p>
-          <p>Хлеб:</p>
-          <p>Овощи:</p>
-          <p>Соусы:</p>
-          <p class="modal_window__descriptionLast">Начинка:</p>
-          <p class="modal_window__nameSandwitch">Овощной</p>
+          <p>Размер: ${customSandwich.sizes || "-"}</p>
+          <p>Хлеб: ${customSandwich.breads || "-"}</p>
+          <p>Овощи: ${customSandwich.vegetables || "-"}</p>
+          <p>Соусы: ${customSandwich.sauces || "-"}</p>
+          <p class="modal_window__descriptionLast">Начинка: ${
+            customSandwich.fillings || "-"
+          }</p>
+          <p class="modal_window__nameSandwitch">${
+            customSandwich.nameSandwich
+          }</p>
         </div>
-      
-    
-    
     `;
+
+    element1 = `
+      <p>КОЛИЧЕСТВО</p>
+      <div class="product_card__board">
+        <button class="product_card__inc-dec">-</button>
+        <p class="product_card__value">1</p>
+        <button class="product_card__inc-dec">+</button>
+      </div>
+    `;
+
     modalIngredients.innerHTML = element;
+
+    const countElement = document.createElement("div");
+    const buttonElement = document.createElement("button");
+
+    countElement.className = "product_card__count count_modal";
+    buttonElement.className = "product_card_btn_add modal_btn";
+
+    countElement.innerHTML = element1;
+    countElement.innerHTML = element1;
+    buttonElement.innerText = "В корзину";
+
+    footerModal.prepend(countElement);
+    bottomFooter.appendChild(buttonElement);
   }
 };
 
