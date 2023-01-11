@@ -14,6 +14,7 @@ const bottomFooter = document.querySelector(".modal_window__bottomFooter");
 
 const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
 let customSandwich = {};
+let shopingCard = [];
 
 const addIDforData = () => {
   const generateID = () =>
@@ -95,7 +96,7 @@ const addEventsOnTabs = (categories, newClass) => {
   }
 };
 
-buttonCloseModal.addEventListener("click", () => {
+const onClose = () => {
   modalWindow.classList.remove("open_modal");
   for (let i = 0; i < tabsModal.length; i++) {
     tabsModal[i].classList.remove("active_ingredients");
@@ -103,7 +104,10 @@ buttonCloseModal.addEventListener("click", () => {
     if (i === 0) tabsModal[i].classList.add("active_ingredients");
   }
   customSandwich = {};
-});
+  modalPrice.innerHTML = "Цена: 0 руб.";
+};
+
+buttonCloseModal.addEventListener("click", onClose);
 
 const linkLogo = (currentCategory) => {
   switch (currentCategory) {
@@ -126,13 +130,37 @@ const collectProduct = (product) => {
   openModal();
   renderIngredients();
   if (!customSandwich.hasOwnProperty("nameSandwich"))
-    customSandwich.nameSandwich = product.name;
-  if (!customSandwich.hasOwnProperty("srcImage"))
-    customSandwich.srcImage = product.image;
+    customSandwich.name = product.name;
+  if (!customSandwich.hasOwnProperty("image"))
+    customSandwich.image = product.image;
+};
+
+const renderShopingMenu = () => {
+  const contentSopingMenu = document.querySelector(".shopping_cart__content"); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  const shopingCardPrice = document.querySelector(".shopping_cart__price");
+
+  let element = "";
+  shopingCard.map((item) => {
+    element += `
+    <div class="shopping_cart__item" id=${item.productID}>
+      <p>${item.name}</p>
+      <p>1</p>
+    </div>
+    `;
+    contentSopingMenu.innerHTML = element;
+  });
+
+  const priceShopingCard = shopingCard.map((item) => item.price);
+
+  const priceResult = priceShopingCard.reduce((acc, cur) => acc + cur);
+
+  shopingCardPrice.innerHTML = `Итого: ${priceResult} руб.`;
 };
 
 const addProductInShoppingCard = (product) => {
-  console.log("addProductInShoppingCard", product);
+  shopingCard.push(product);
+  renderShopingMenu();
+  console.log(shopingCard, "shopingCard");
 };
 
 const eventCardModal = (product, category) => {
@@ -278,9 +306,9 @@ const renderProducts = (currentCategory = "pizza") => {
             <div class="product_card__count">
                 <p>КОЛИЧЕСТВО</p>
                 <div class="product_card__board">
-                    <button class="product_card__inc-dec">-</button>
+                    <button class="product_card__inc-dec product_inc">-</button>
                     <p class="product_card__value">1</p>
-                    <button class="product_card__inc-dec">+</button>
+                    <button class="product_card__inc-dec product_dec">+</button>
                 </div>
             </div>
             <button class="product_card_btn_add">
@@ -301,6 +329,21 @@ const renderProducts = (currentCategory = "pizza") => {
         : addProductInShoppingCard(selectedProduct);
     });
   }
+
+  // const incButton = document.querySelectorAll(
+  //   ".product_card__inc-dec product_inc"
+  // );
+  // const decButton = document.querySelectorAll(
+  //   ".product_card__inc-dec product_dec"
+  // );
+
+  // for (let i = 0; i < incButton.length; i++) {
+  //   incButton[i].addEventListener("click", () => {
+  //     const selectedProduct = data.menu.find(
+  //       (item) => item.productID === incButton[i].parentNode.id
+  //     );
+  //   });
+  // }
 };
 
 const renderIngredients = (ingredients = "sizes") => {
@@ -359,7 +402,7 @@ const renderIngredients = (ingredients = "sizes") => {
     element = `
         <div class="modal_window__leftContent">
           <div class="product_card__image modal_image">
-            <img src="${customSandwich.srcImage}">
+            <img src="${customSandwich.image}">
           </div>
         </div>
         <div class="modal_window__rightContent">
@@ -373,7 +416,7 @@ const renderIngredients = (ingredients = "sizes") => {
           }</p>
           <p>Соусы: ${
             customSandwich.hasOwnProperty("sauces")
-              ? [...customSandwich.sauces.map((item) => `${item.name} `)]
+              ? [...customSandwich.sauces.map((item) => `${item.name}`)]
               : "-"
           }</p>
           <p class="modal_window__descriptionLast">Начинка: ${
@@ -381,9 +424,7 @@ const renderIngredients = (ingredients = "sizes") => {
               ? [...customSandwich.fillings.map((item) => `${item.name} `)]
               : "-"
           }</p>
-          <p class="modal_window__nameSandwitch">${
-            customSandwich.nameSandwich
-          }</p>
+          <p class="modal_window__nameSandwitch">${customSandwich.name}</p>
         </div>
     `;
 
@@ -407,6 +448,10 @@ const renderIngredients = (ingredients = "sizes") => {
     countElement.innerHTML = element1;
     countElement.innerHTML = element1;
     buttonElement.innerText = "В корзину";
+    buttonElement.addEventListener("click", () => {
+      addProductInShoppingCard(customSandwich);
+      onClose();
+    });
 
     footerModal.prepend(countElement);
     bottomFooter.appendChild(buttonElement);
