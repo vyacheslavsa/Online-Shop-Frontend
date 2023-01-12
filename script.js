@@ -136,7 +136,7 @@ const collectProduct = (product) => {
 };
 
 const renderShopingMenu = () => {
-  const contentSopingMenu = document.querySelector(".shopping_cart__content"); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  const contentSopingMenu = document.querySelector(".shopping_cart__content");
   const shopingCardPrice = document.querySelector(".shopping_cart__price");
 
   let element = "";
@@ -330,18 +330,17 @@ const renderProducts = (currentCategory = "pizza") => {
     });
   }
 
-  // const incButton = document.querySelectorAll(
-  //   ".product_card__inc-dec product_inc"
-  // );
-  // const decButton = document.querySelectorAll(
-  //   ".product_card__inc-dec product_dec"
-  // );
+  const incButton = document.querySelectorAll(
+    ".product_inc"
+  );
+  const decButton = document.querySelectorAll(
+    "product_dec"
+  );
+  console.log(incButton)
 
   // for (let i = 0; i < incButton.length; i++) {
   //   incButton[i].addEventListener("click", () => {
-  //     const selectedProduct = data.menu.find(
-  //       (item) => item.productID === incButton[i].parentNode.id
-  //     );
+  //     console.log('object')
   //   });
   // }
 };
