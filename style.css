@@ -522,9 +522,26 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 20px;
     border-bottom: 2px solid var(--yellow200);
     height: 46px;
     box-sizing: border-box;
     font-size: 16px;
+}
+
+.shopping_cart__item>div>img {
+    cursor: pointer;
+}
+
+.shopping_cart__item>div {
+    display: flex;
+    align-items: center;
+    min-width: 45px;
+}
+
+.shopping_cart__item>div>p {
+    margin-right: 10px;
+}
+
+.shopping_cart__content {
+    padding: 0 20px;
 }
