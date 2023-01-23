@@ -16,6 +16,19 @@ const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
 let customSandwich = {};
 let shopingCard = [];
 
+const ALL_CATEGORIES = {
+  breads: "breads",
+  fillings: "fillings",
+  sauces: "sauces",
+  sizes: "sizes",
+  vegetables: "vegetables",
+};
+
+const CATEGORIES_WITH_MULTIPLE_INGRIDIENTS = [
+  ALL_CATEGORIES.breads,
+  ALL_CATEGORIES.sauces,
+];
+
 const addIDforData = () => {
   const generateID = () =>
     String(Math.round(Math.random() * 10000000000000000000));
@@ -133,6 +146,12 @@ const collectProduct = (product) => {
     customSandwich.name = product.name;
   if (!customSandwich.hasOwnProperty("image"))
     customSandwich.image = product.image;
+  if (!customSandwich.hasOwnProperty("count"))
+    customSandwich.count = product.count;
+  // if (!customSandwich.hasOwnProperty("price"))
+  //   customSandwich.price = 0;
+  //   if (!customSandwich.hasOwnProperty("productID"))
+  //   customSandwich.productID = product.productID;
 };
 
 const deleteProduct = (id) => {
@@ -185,7 +204,6 @@ const renderShopingMenu = () => {
 };
 
 const addProductInShoppingCard = (product) => {
-  console.log(product);
   const findElement = shopingCard.find(
     (item) => item.productID === product.productID
   );
@@ -208,7 +226,7 @@ const eventCardModal = (product, category) => {
   const searchResults = data[category].find(
     (item) => item.productID === product.id
   );
-  if (Object.keys(customSandwich).length === 2)
+  if (Object.keys(customSandwich).length === 3)
     customSandwich.allIdIngredients = [];
 
   if (!customSandwich.hasOwnProperty(category)) {
@@ -472,9 +490,9 @@ const renderIngredients = (ingredients = "sizes") => {
     element1 = `
       <p>КОЛИЧЕСТВО</p>
       <div class="product_card__board">
-        <button class="product_card__inc-dec">-</button>
-        <p class="product_card__value">1</p>
-        <button class="product_card__inc-dec">+</button>
+        <button class="product_card__inc-dec dec_modal">-</button>
+        <p class="product_card__value count_modal_value">${customSandwich.count}</p>
+        <button class="product_card__inc-dec inc_modal">+</button>
       </div>
     `;
 
@@ -487,8 +505,8 @@ const renderIngredients = (ingredients = "sizes") => {
     buttonElement.className = "product_card_btn_add modal_btn";
 
     countElement.innerHTML = element1;
-    countElement.innerHTML = element1;
     buttonElement.innerText = "В корзину";
+
     buttonElement.addEventListener("click", () => {
       addProductInShoppingCard(customSandwich);
       onClose();
@@ -496,6 +514,22 @@ const renderIngredients = (ingredients = "sizes") => {
 
     footerModal.prepend(countElement);
     bottomFooter.appendChild(buttonElement);
+
+    const incModal = document.querySelector(".inc_modal");
+    const decModal = document.querySelector(".dec_modal");
+    const valueModal = document.querySelector(".count_modal_value");
+
+    incModal.addEventListener("click", () => {
+      customSandwich.count++;
+      valueModal.innerHTML = customSandwich.count;
+    });
+
+    decModal.addEventListener("click", () => {
+      if (customSandwich.count > 1) {
+        customSandwich.count--;
+        valueModal.innerHTML = customSandwich.count;
+      }
+    });
   }
 };
 
