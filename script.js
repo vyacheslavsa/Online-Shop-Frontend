@@ -12,9 +12,6 @@ const tabsModal = document.querySelectorAll(".modal_window__tab");
 const footerModal = document.querySelector(".modal_window__footer");
 const bottomFooter = document.querySelector(".modal_window__bottomFooter");
 
-const allObjData = ["breads", "fillings", "sauces", "sizes", "vegetables"];
-let customSandwich = {};
-let shopingCard = [];
 
 const ALL_CATEGORIES = {
   breads: "breads",
@@ -24,24 +21,22 @@ const ALL_CATEGORIES = {
   vegetables: "vegetables",
 };
 
-const CATEGORIES_WITH_MULTIPLE_INGRIDIENTS = [
+const allObjData = [
   ALL_CATEGORIES.breads,
+  ALL_CATEGORIES.fillings,
   ALL_CATEGORIES.sauces,
+  ALL_CATEGORIES.sizes,
+  ALL_CATEGORIES.vegetables
 ];
 
+let customSandwich = {};
+let shopingCart = [];
+
 const addIDforData = () => {
-  const generateID = () =>
-    String(Math.round(Math.random() * 10000000000000000000));
-
-  const addID = (arr) => {
-    arr.map((item) => (item.productID = generateID()));
-  };
-
+  const generateID = () => String(Math.round(Math.random() * 10000000000000000000));
+  const addID = (arr) => {arr.map((item) => (item.productID = generateID()));};
   allObjData.push("menu");
-
-  allObjData.forEach((item) => {
-    addID(data[item]);
-  });
+  allObjData.forEach((item) => addID(data[item]));
 };
 
 const reFormatData = () => {
@@ -60,11 +55,7 @@ addIDforData();
 const concatIdIngredients = () => {
   const arr = [];
   allObjData.forEach((item) => {
-    if (item !== "menu") {
-      data[item].forEach((key) => {
-        arr.push(key);
-      });
-    }
+    if (item !== "menu") data[item].forEach((key) => arr.push(key));
   });
   return arr;
 };
@@ -76,10 +67,14 @@ const calculatePrice = () => {
     const result = customSandwich.allIdIngredients.map((item) =>
       concatIdIngredients().find((key) => key.productID === item)
     );
-    const arrPrice = result.map((item) => item.price);
 
-    const calcValue = arrPrice.reduce((acc, cur) => acc + cur);
-    customSandwich.price = calcValue;
+    if(result.length){
+      const arrPrice = result.map((item) => item.price);
+      const calcValue = arrPrice.reduce((acc, cur) => acc + cur);
+      customSandwich.price = calcValue;
+    } else {
+      customSandwich.price = 0;
+    }
   } else {
     customSandwich.price = 0;
   }
@@ -109,8 +104,15 @@ const addEventsOnTabs = (categories, newClass) => {
   }
 };
 
-const onClose = () => {
+const onCloseModal = () => {
   modalWindow.classList.remove("open_modal");
+
+  const countPanel = document.querySelector('.count_modal');
+  const modalBtn = document.querySelector('.modal_btn');
+
+  if(countPanel)countPanel.remove();
+  if(modalBtn)modalBtn.remove();
+
   for (let i = 0; i < tabsModal.length; i++) {
     tabsModal[i].classList.remove("active_ingredients");
     tabsModal[i].classList.remove("have_ingredients");
@@ -120,7 +122,7 @@ const onClose = () => {
   modalPrice.innerHTML = "Цена: 0 руб.";
 };
 
-buttonCloseModal.addEventListener("click", onClose);
+buttonCloseModal.addEventListener("click", onCloseModal);
 
 const linkLogo = (currentCategory) => {
   switch (currentCategory) {
@@ -140,34 +142,36 @@ const openModal = () => {
 };
 
 const collectProduct = (product) => {
-  openModal();
-  renderIngredients();
+  
   if (!customSandwich.hasOwnProperty("nameSandwich"))
     customSandwich.name = product.name;
   if (!customSandwich.hasOwnProperty("image"))
     customSandwich.image = product.image;
   if (!customSandwich.hasOwnProperty("count"))
     customSandwich.count = product.count;
-  // if (!customSandwich.hasOwnProperty("price"))
-  //   customSandwich.price = 0;
-  //   if (!customSandwich.hasOwnProperty("productID"))
-  //   customSandwich.productID = product.productID;
+  if (!customSandwich.hasOwnProperty("productID"))
+     customSandwich.productID = product.productID;
+  if (!customSandwich.hasOwnProperty("price"))
+     customSandwich.price = 0;
+
+  openModal();
+  renderIngredients();
 };
 
 const deleteProduct = (id) => {
-  const indexElem = shopingCard.findIndex((item) => item.productID === id);
-  shopingCard.splice(indexElem, 1);
+  const indexElem = shopingCart.findIndex((item) => item.productID === id);
+  shopingCart.splice(indexElem, 1);
   renderShopingMenu();
 };
 
 const renderShopingMenu = () => {
   const contentSopingMenu = document.querySelector(".shopping_cart__content");
-  const shopingCardPrice = document.querySelector(".shopping_cart__price");
+  const shopingCartPrice = document.querySelector(".shopping_cart__price");
 
   let element = "";
 
-  if (shopingCard.length > 0) {
-    shopingCard.map((item) => {
+  if (shopingCart.length > 0) {
+    shopingCart.map((item) => {
       element += `
     <div class="shopping_cart__item" id=${item.productID}>
       <p>${item.name}</p>
@@ -186,12 +190,16 @@ const renderShopingMenu = () => {
   let priceShopingCard = [];
   let priceResult = 0;
 
-  if (shopingCard.length) {
-    priceShopingCard = shopingCard.map((item) => item.price * item.count);
+  if (shopingCart.length) {
+    priceShopingCard = shopingCart.map((item) => item.price * item.count);
     priceResult = priceShopingCard.reduce((acc, cur) => acc + cur);
   }
 
-  shopingCardPrice.innerHTML = `Итого: ${priceResult} руб.`;
+  
+
+  
+
+  shopingCartPrice.innerHTML = `Итого: ${priceResult} руб.`;
 
   const allDeleteButtons = document.querySelectorAll(
     ".shopping_cart__delete_icon"
@@ -204,67 +212,64 @@ const renderShopingMenu = () => {
 };
 
 const addProductInShoppingCard = (product) => {
-  const findElement = shopingCard.find(
-    (item) => item.productID === product.productID
-  );
+  const findElement = shopingCart.find((item) => item.productID === product.productID);
 
   if (findElement) {
     findElement.count += product.count;
   } else {
-    shopingCard.push({ ...product });
+    shopingCart.push({ ...product });
   }
 
   renderShopingMenu();
+  
 };
 
-const eventCardModal = (product, category) => {
-  const propertyIsArray =
-    category === "vegetables" ||
-    category === "sauces" ||
-    category === "fillings";
+const onClickCardInModal = (selectedElement, category) => {
+  const isMultipleCaterory = 
+  category === ALL_CATEGORIES.vegetables ||
+  category === ALL_CATEGORIES.sauces ||
+  category === ALL_CATEGORIES.fillings;
 
-  const searchResults = data[category].find(
-    (item) => item.productID === product.id
-  );
-  if (Object.keys(customSandwich).length === 3)
-    customSandwich.allIdIngredients = [];
+  const searchResults = data[category].find((item) => item.productID === selectedElement.id);
+
+  if (Object.keys(customSandwich).length === 5)customSandwich.allIdIngredients = [];
 
   if (!customSandwich.hasOwnProperty(category)) {
-    product.classList.add("selected_ingredient");
-    if (propertyIsArray) {
+    selectedElement.classList.add("selected_ingredient");
+    if (isMultipleCaterory) {
       customSandwich[category] = [searchResults];
     } else {
       customSandwich[category] = searchResults.name;
     }
     if (
       customSandwich.hasOwnProperty("allIdIngredients") &&
-      !customSandwich.allIdIngredients.includes(product.id)
+      !customSandwich.allIdIngredients.includes(selectedElement.id)
     ) {
-      customSandwich.allIdIngredients.push(product.id);
+      customSandwich.allIdIngredients.push(selectedElement.id);
     } else {
       if (!customSandwich.hasOwnProperty("allIdIngredients")) {
         customSandwich.allIdIngredients = [];
-        customSandwich.allIdIngredients.push(product.id);
+        customSandwich.allIdIngredients.push(selectedElement.id);
       }
 
       customSandwich.allIdIngredients.splice(
         customSandwich.allIdIngredients.findIndex(
-          (item) => item === product.id
+          (item) => item === selectedElement.id
         ),
         1
       );
-      product.classList.remove("selected_ingredient");
+      selectedElement.classList.remove("selected_ingredient");
     }
-  } else if (customSandwich.allIdIngredients.includes(product.id)) {
-    product.classList.remove("selected_ingredient");
+  } else if (customSandwich.allIdIngredients.includes(selectedElement.id)) {
+    selectedElement.classList.remove("selected_ingredient");
 
-    if (propertyIsArray) {
+    if (isMultipleCaterory) {
       if (customSandwich[category].length === 1) {
         delete customSandwich[category];
       } else {
         customSandwich[category].splice(
           customSandwich[category].findIndex(
-            (item) => item.productID === product.id
+            (item) => item.productID === selectedElement.id
           ),
           1
         );
@@ -273,20 +278,17 @@ const eventCardModal = (product, category) => {
       delete customSandwich[category];
     }
 
-    customSandwich.allIdIngredients.splice(
-      customSandwich.allIdIngredients.findIndex((item) => item === product.id),
-      1
-    );
+    customSandwich.allIdIngredients.splice(customSandwich.allIdIngredients.findIndex((item) => item === selectedElement.id),1);
 
     if (customSandwich.allIdIngredients.length === 0) {
       delete customSandwich.allIdIngredients;
-      delete customSandwich.price;
+      customSandwich.price = 0;
     }
   } else {
     const cardsModal = document.querySelectorAll(".modal_window__card");
     const currentCard = document.querySelector(".selected_ingredient");
 
-    if (!propertyIsArray) {
+    if (!isMultipleCaterory) {
       customSandwich.allIdIngredients.splice(
         customSandwich.allIdIngredients.findIndex(
           (item) => item === currentCard.id
@@ -295,20 +297,20 @@ const eventCardModal = (product, category) => {
       );
     }
 
-    customSandwich.allIdIngredients.push(product.id);
+    customSandwich.allIdIngredients.push(selectedElement.id);
 
-    if (propertyIsArray) {
+    if (isMultipleCaterory) {
       customSandwich[category].push(searchResults);
-      product.classList.add("selected_ingredient");
+      selectedElement.classList.add("selected_ingredient");
     } else {
       customSandwich[category] = searchResults.name;
     }
 
     for (let i = 0; i < cardsModal.length; i++) {
-      !propertyIsArray && cardsModal[i].classList.remove("selected_ingredient");
+      !isMultipleCaterory && cardsModal[i].classList.remove("selected_ingredient");
     }
 
-    product.classList.add("selected_ingredient");
+    selectedElement.classList.add("selected_ingredient");
   }
 
   const allTabsModal = document.querySelectorAll(".modal_window__tab");
@@ -373,7 +375,7 @@ const renderProducts = (currentCategory = "pizza") => {
             }>
                 <a>${product.description}</a>
             </div>
-                <p class="product_card__price">Цена: ${product.price} руб.</p>
+            ${isSandwiches ? '<p></p>' : `<p class="product_card__price">Цена: ${product.price} руб.</p>`}
             <div class="product_card__count">
                 <p>КОЛИЧЕСТВО</p>
                 <div class="product_card__board">
@@ -453,7 +455,7 @@ const renderIngredients = (ingredients = "sizes") => {
         allCardModal[i].classList.add("selected_ingredient");
 
       allCardModal[i].addEventListener("click", () => {
-        eventCardModal(allCardModal[i], ingredients);
+        onClickCardInModal(allCardModal[i], ingredients);
       });
     }
   } else {
@@ -489,7 +491,7 @@ const renderIngredients = (ingredients = "sizes") => {
 
     element1 = `
       <p>КОЛИЧЕСТВО</p>
-      <div class="product_card__board">
+      <div class="product_card__board modal_board">
         <button class="product_card__inc-dec dec_modal">-</button>
         <p class="product_card__value count_modal_value">${customSandwich.count}</p>
         <button class="product_card__inc-dec inc_modal">+</button>
@@ -509,7 +511,7 @@ const renderIngredients = (ingredients = "sizes") => {
 
     buttonElement.addEventListener("click", () => {
       addProductInShoppingCard(customSandwich);
-      onClose();
+      onCloseModal();
     });
 
     footerModal.prepend(countElement);
